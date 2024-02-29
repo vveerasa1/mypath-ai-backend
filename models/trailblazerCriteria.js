@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
 const trailblazerCriteriaSchema=mongoose.Schema({
     communityId:{
         type: Schema.Types.ObjectId,
-        ref: 'community'
+        ref: 'communities'
     },
     tier:{
         type: Number,
@@ -34,4 +36,5 @@ const trailblazerCriteriaSchema=mongoose.Schema({
     }
 
 });
-module.exports = mongoose.model("trailblazerCriteria", trailblazerCriteriaSchema);
+const trailblazerCriteria = mongoose.model("trailblazerCriterias", trailblazerCriteriaSchema);
+module.exports={trailblazerCriteria};

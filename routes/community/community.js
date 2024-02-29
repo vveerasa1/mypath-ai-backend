@@ -1,5 +1,5 @@
 const express = require("express");
 const { createCommunity } = require("../../service/community/communityService");
 const router = express.Router();
-router.post("/community", createCommunity);
+router.post("/", createCommunity);
 module.exports = router;
