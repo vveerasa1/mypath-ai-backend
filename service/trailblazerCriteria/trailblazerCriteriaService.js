@@ -11,15 +11,33 @@ const createTrailblazerCriteria = async (req, res) => {
     yieldPercentage:req.body.yieldPercentage,
     trailblazerPercentage:req.body.trailblazerPercentage
   });
+
   try {
-    const result = await data.save();
+    await data.validate();
+    let _isCriteriaPresent=await trailblazerCriteria.findOne({communityId:data.communityId});
+    let result;
+    if(_isCriteriaPresent)
+    {
+        const{_id,...updatedData}=data._doc;
+        result= await trailblazerCriteria.findOneAndUpdate({ communityId: data.communityId },updatedData, { new: true });
+         res.status(200).json({
+            code: 200,
+            status: "Success",
+            message: "Trailblazercriteria is Updated Successfully",
+            data: result,
+          });
+    }
+    else{
+    result = await data.save();
     res.status(200).json({
       code: 200,
       status: "Success",
-      message: "Trailblazercriteria created successfully",
+      message: "Trailblazercriteria Created Successfully",
       data: result,
     });
+    }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: error.message });
   }
 };
