@@ -37,8 +37,7 @@ const createTrailblazerCriteria = async (req, res) => {
     });
     }
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ status:"Error",message: error.message });
   }
 };
 

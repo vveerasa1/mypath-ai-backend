@@ -11,20 +11,16 @@ const trailblazerCriteriaSchema=mongoose.Schema({
         type: Number,
         required: [true,"Tier is required"],
         validate: {
-            validator: function(value) {
-                return Number.isInteger(value);
-            },
-            message: 'Tier must be an Integer'
+            validator: Number.isInteger,
+            message: 'Tier must be an integer (no decimals)'
         }
     },
     noOfMembers:{
         type:Number,
         required: [true,"NoOfMembers is required"],
         validate: {
-            validator: function(value) {
-                return Number.isInteger(value);
-            },
-            message: 'NoOfMembers must be an Integer'
+            validator: Number.isInteger,
+            message: 'NoOfMembers must be an integer (no decimals)'
         }
     },
     engagement:{
@@ -51,10 +47,8 @@ const trailblazerCriteriaSchema=mongoose.Schema({
         type:Number,
         required: [true,"NoOfFollowers is required"],
         validate: {
-            validator: function(value) {
-                return Number.isInteger(value);
-            },
-            message: 'NoOfFollowers must be an Integer'
+            validator: Number.isInteger,
+            message: 'NoOfFollowers must be an integer (no decimals)'
         }
     },
     yieldPercentage:{
@@ -65,6 +59,7 @@ const trailblazerCriteriaSchema=mongoose.Schema({
                 return Number.isFinite(value);
             },
             message: 'YieldPercentage must be an Number'
+        
         }
     },
     trailblazerPercentage:{
