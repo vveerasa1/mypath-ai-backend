@@ -3,6 +3,7 @@ const mongoose= require('mongoose');
 const config= require('./config/local.json');
 const community= require('./routes/community/community');
 const trailblazerCriteria= require('./routes/trailblazerCriteria/trailblazerCriteria');
+
 const app=express();
 // Connect to MongoDB
 mongoose.connect(`${config.mongoDb.url}${config.mongoDb.dbName}`)
