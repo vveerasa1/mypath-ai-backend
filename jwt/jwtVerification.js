@@ -6,17 +6,6 @@ const verifier = CognitoJwtVerifier.create({
   tokenUse: "access",
   clientId: "1pr3h4lv6ot36k6khcfs656vp1",
 });
-// const verifyToken = async function(){    try {
-//     console.log(req.headers.authorization);
-//         const payload = await verifier.verify(
-//           req.headers.authorization // the JWT as string
-//         );
-//         return payload ? true: new Error("Token is not valid"); 
-//       } catch {
-//         throw new Error("Token is not valid!");
-//       };
-//     }
-// Middleware function to verify the token
 const verifyToken = async (req, res, next) => {
     try {
       const token = req.header('x-auth-token');

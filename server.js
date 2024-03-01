@@ -1,8 +1,7 @@
 const express= require('express');
 const mongoose= require('mongoose');
 const config= require('./config/local.json');
-const community= require('./routes/community/community');
-const trailblazerCriteria= require('./routes/trailblazerCriteria/trailblazerCriteria');
+const routes= require('./routes/index');
 
 const app=express();
 // Connect to MongoDB
@@ -20,5 +19,4 @@ mongoose.connect(`${config.mongoDb.url}${config.mongoDb.dbName}`)
       console.log(`Server is Listening on port ${config.port}`)
     });
     app.use(express.json());
-    app.use('/community',community);
-app.use("/communities",trailblazerCriteria);
+    app.use("/",routes);

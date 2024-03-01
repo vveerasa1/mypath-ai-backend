@@ -1,4 +1,4 @@
-const {trailblazerCriteria} = require("../../models/trailblazerCriteria");
+const {trailblazerCriteria} = require("../../../models/trailblazerCriteria");
 
 const createTrailblazerCriteria = async (req, res) => {
   const data = new trailblazerCriteria({
