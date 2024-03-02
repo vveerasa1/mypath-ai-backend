@@ -1,4 +1,4 @@
-const {community} = require("../../models/community");
+const { community } = require("../../models/community");
 
 const createCommunity = async (req, res) => {
   const data = new community({
@@ -17,6 +17,37 @@ const createCommunity = async (req, res) => {
   }
 };
 
+const getAllCommunities = async (req, res) => {
+  try {
+    const communities = await community.find({});
+    res.status(200).json({
+      code: 200,
+      status: "Success",
+      message: "Retrieved all the Communities Sucessfully",
+      data: communities,
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getCommunityById = async (req, res) => {
+  const communityId = req.params.communityId;
+  try {
+    const requestedCommunity = await community.findById(communityId);
+    res.status(200).json({
+      code: 200,
+      status: "Success",
+      message: "Retrieved the Community Sucessfully",
+      data: requestedCommunity,
+    });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createCommunity,
+  getAllCommunities,
+  getCommunityById,
 };
