@@ -1,9 +1,18 @@
 const { community } = require("../../models/community");
+const { uploadFile }=require("../imageUpload/imageUpload");
 
 const createCommunity = async (req, res) => {
-  const data = new community({
+  const params = {
+    bucketName: 'mypath-ai/communities',
+    fileName: req.file.originalname,
+    fileContent: req.file.buffer,
+  };
+ const uploadedImageInS3=await uploadFile(params);
+ const data = new community({
     communityName: req.body.communityName,
+    communityImage:uploadedImageInS3.Location
   });
+
   try {
     const result = await data.save();
     res.status(200).json({

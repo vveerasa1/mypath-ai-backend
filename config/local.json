@@ -7,5 +7,9 @@
     "amplifyConfig":{
         "userPoolId":"us-east-1_5RgmfErcR",
         "clientId":"1pr3h4lv6ot36k6khcfs656vp1"
+    },
+    "aws":{
+        "AccessKeyId":"AKIATIVJ4HZQDZXUUZIQ",
+        "secretAccessKey":"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"
     }
 }
