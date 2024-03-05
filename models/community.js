@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const communitySchema=mongoose.Schema({
   communityName:{
     type:String,
-    required:true
+    required:true,
+    unique:true
   },
   communityImage:{
     type:String,

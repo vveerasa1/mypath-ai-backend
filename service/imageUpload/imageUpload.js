@@ -7,16 +7,8 @@ const s3 = new AWS.S3({
 });
 
 const uploadFile = async (parameters) => {
-  const fileContent = fs.readFileSync(parameters.fileName);
-
-  const params = {
-    Bucket: parameters.bucketName,
-    Key: parameters.fileName,
-    Body: fileContent,
-  };
-
   const data = await new Promise((resolve, reject) => {
-    s3.upload(params, (err, data) => {
+    s3.upload(parameters, (err, data) => {
       if (err) {
         console.error("Error uploading file:", err);
         reject("Error uploading file");

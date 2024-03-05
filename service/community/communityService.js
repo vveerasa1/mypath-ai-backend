@@ -3,9 +3,9 @@ const { uploadFile }=require("../imageUpload/imageUpload");
 
 const createCommunity = async (req, res) => {
   const params = {
-    bucketName: 'mypath-ai/communities',
-    fileName: req.file.originalname,
-    fileContent: req.file.buffer,
+    Bucket: 'mypath-ai/communities',
+    Key: req.file.originalname,
+    Body: req.file.buffer,
   };
  const uploadedImageInS3=await uploadFile(params);
  const data = new community({
