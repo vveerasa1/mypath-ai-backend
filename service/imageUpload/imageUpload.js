@@ -1,9 +1,9 @@
 const AWS = require("aws-sdk");
 const fs = require("fs");
-const config = require("../../config/local.json");
+const config = require("../../config");
 const s3 = new AWS.S3({
-  accessKeyId: `${config.aws.AccessKeyId}`,
-  secretAccessKey: `${config.aws.secretAccessKey}`,
+  accessKeyId: config.aws.AccessKeyId,
+  secretAccessKey: config.aws.secretAccessKey,
 });
 
 const uploadFile = async (parameters) => {

@@ -1,11 +1,11 @@
 const { CognitoJwtVerifier } =require("aws-jwt-verify");
-const config= require('../config/local.json');
+const config= require('../config');
 
 // Verifier that expects valid access tokens:
 const verifier = CognitoJwtVerifier.create({
-  userPoolId: "us-east-1_5RgmfErcR",
+  userPoolId: config.amplifyConfig.userPoolId,
   tokenUse: "access",
-  clientId: "1pr3h4lv6ot36k6khcfs656vp1",
+  clientId: config.amplifyConfig.clientId,
 });
 const verifyToken = async (req, res, next) => {
     try {

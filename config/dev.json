@@ -1,5 +1,6 @@
 {
     "port":4000,
+    "env":"dev",
     "mongoDb":{
         "url":"mongodb+srv://admin:zicQuuV9ne3ibGFr@cluster0.nzbdrb9.mongodb.net/",
         "dbName":"mypath-ai"
