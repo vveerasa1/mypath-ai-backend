@@ -1,16 +1,16 @@
-const { community } = require("../../models/community");
-const { uploadFile }=require("../imageUpload/imageUpload");
+const { community } = require("../../models/community/community");
+const { uploadFile } = require("../imageUpload/imageUpload");
 
 const createCommunity = async (req, res) => {
   const params = {
-    Bucket: 'mypath-ai/communities',
+    Bucket: 'mypath--ai/communities',
     Key: req.file.originalname,
     Body: req.file.buffer,
   };
- const uploadedImageInS3=await uploadFile(params);
- const data = new community({
+  const uploadedImageInS3 = await uploadFile(params);
+  const data = new community({
     communityName: req.body.communityName,
-    communityImage:uploadedImageInS3.Location
+    communityImage: uploadedImageInS3.Location
   });
 
   try {
@@ -54,6 +54,7 @@ const getCommunityById = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 
 module.exports = {
   createCommunity,
