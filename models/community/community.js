@@ -21,7 +21,8 @@ const communitySchema = mongoose.Schema({
   },
   visibility:{
     type: String,
-    enum: ["Public","Private"]
+    enum: ["Public","Private"],
+    default: 'Private'
   }
 
 });

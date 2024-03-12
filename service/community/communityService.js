@@ -97,7 +97,7 @@ const getAllCommunities = async (req, res) => {
       .limit(limit)
       .exec();
 
-    const totalCommunities = await Community.countDocuments();
+    const totalCommunities = await Community.countDocuments(filter);
   
     const totalPages = Math.ceil(totalCommunities / limit);
 

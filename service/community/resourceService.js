@@ -63,7 +63,7 @@ const addResource = async (req, res) => {
         .limit(limit)
         .exec();
   
-      const totalResources = await Resource.countDocuments();
+      const totalResources = await Resource.countDocuments(filter);
   
       const totalPages = Math.ceil(totalResources / limit);
   

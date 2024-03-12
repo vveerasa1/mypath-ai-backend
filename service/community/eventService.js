@@ -90,7 +90,7 @@ const addEvent = async (req, res) => {
         .limit(limit)
         .exec();
   
-      const totalEvents = await Event.countDocuments();
+      const totalEvents = await Event.countDocuments(filter);
   
       const totalPages = Math.ceil(totalEvents / limit);
   
