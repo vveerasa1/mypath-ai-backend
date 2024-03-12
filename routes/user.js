@@ -1,6 +1,6 @@
 const express = require("express");
-const {createUserSettings,getUserSettings}= require("../../service/user/userService");
-const { verifyToken } = require("../../jwt/jwtVerification");
+const {createUserSettings,getUserSettings}= require("../service/user/userService");
+const { verifyToken } = require("../jwt/jwtVerification");
 const router = express.Router();
 
 router.post("/",verifyToken,createUserSettings);

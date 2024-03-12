@@ -53,6 +53,10 @@ const addResource = async (req, res) => {
       const filter = {};
     
       filter.deleted = false;
+
+      if(req.params.communityId) {
+        filter.communityId = req.params.communityId;
+      }
       const resources = await Resource.find(filter)
         .sort({updatedAt: -1})
         .skip(skip)
@@ -85,7 +89,7 @@ const addResource = async (req, res) => {
   }
   
   const getResource = async (req, res) => {
-    const resourceId = req.params.eventId;
+    const resourceId = req.params.resourceId;
     try {
       const resource = await Resource.findById(resourceId);
       if (!resource) {

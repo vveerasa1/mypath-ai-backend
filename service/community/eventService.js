@@ -1,7 +1,14 @@
+const { community } = require("../../models/community/community");
 const { Event } = require("../../models/community/events");
 const { uploadFile } = require("../imageUpload/imageUpload");
 
 
+/**
+ * Add new event with file attachement.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 const addEvent = async (req, res) => {
     try {
       let attachment = '';
@@ -27,7 +34,7 @@ const addEvent = async (req, res) => {
       });
   
       const result = await event.save();
-  
+      console.log(`Event has been added for the community ${communityId}: ${event._id}`)
       res.status(200).json({
         code: 200,
         status: 'Success',
@@ -35,7 +42,7 @@ const addEvent = async (req, res) => {
         data: result,
       });
     } catch (error) {
-      console.error('Error:', error);
+      console.error(`Error adding event for the community ${communityId}: ${error}`);
   
       res.status(500).json({
         code: 500,
@@ -46,6 +53,13 @@ const addEvent = async (req, res) => {
     }
   }
   
+
+  /**
+   * Get all the events based on the filters community, start and end date, status
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   */
   const getEvents = async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
@@ -58,6 +72,9 @@ const addEvent = async (req, res) => {
       filter.status = req.query.status;
     }
 
+    if(req.params.communityId) {
+      filter.communityId = req.params.communityId;
+    }
 
     if (req.query.startDate) {
         filter.eventDate = { $gte: new Date(req.query.startDate) };
@@ -88,7 +105,7 @@ const addEvent = async (req, res) => {
         },
       });
     } catch (error) {
-      console.error('Error:', error);
+      console.error(`Error getting events: ${error}`);
       res.status(500).json({
         code: 500,
         status: 'Error',
@@ -98,6 +115,13 @@ const addEvent = async (req, res) => {
     }
   }
   
+  /**
+   * Get event by the id of the event.
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   * @returns 
+   */
   const getEvent = async (req, res) => {
     const eventId = req.params.eventId;
     try {
@@ -128,6 +152,14 @@ const addEvent = async (req, res) => {
   
   }
   
+
+  /**
+   * Update the event with new information.
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   * @returns 
+   */
   const updateEvent = async (req, res) => {
     const eventId = req.params.eventId;
   
@@ -185,6 +217,14 @@ const addEvent = async (req, res) => {
     }
   }
   
+
+  /**
+   * Delete event by event id.
+   * 
+   * @param {\} req 
+   * @param {*} res 
+   * @returns 
+   */
   const deleteEvent = async (req, res) => {
     const eventId = req.params.eventId;
   
@@ -221,6 +261,14 @@ const addEvent = async (req, res) => {
     }
   }
   
+
+  /**
+   * Update the status of the event has cancelled.
+   * 
+   * @param {*} req 
+   * @param {*} res 
+   * @returns 
+   */
   const cancelEvent = async (req, res) => {
     const eventId = req.params.eventId;
   

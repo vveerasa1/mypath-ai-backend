@@ -19,15 +19,15 @@ const communitySchema = mongoose.Schema({
     type: String,
     enum: ["School","Buisness","Others"]
   },
-  communityCoverage:{
+  visibility:{
     type: String,
     enum: ["Public","Private"]
   }
 
 });
-const community = mongoose.model("communities", communitySchema);
+const Community = mongoose.model("communities", communitySchema);
 
-module.exports = { community };
+module.exports = { Community };
 
 // const mongoose = require("mongoose");
 // const domain= require("../domain");
