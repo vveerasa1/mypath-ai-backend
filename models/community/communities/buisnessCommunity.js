@@ -5,7 +5,7 @@ const buisnessSchema = mongoose.Schema({
     ref: "communities",
     required: true,
   },
-  buinsessName:{
+  buisnessName:{
     type: String,
     required: true,
   },
