@@ -79,6 +79,7 @@ const getCommunityById = async (req, res) => {
   }
 };
 
+
 module.exports = {
   createCommunity,
   getAllCommunities,

@@ -1,11 +1,22 @@
 const mongoose = require("mongoose");
-const eventsSchema = mongoose.Schema({
+
+const statusEnum = ['Cancelled', 'Deleted', 'Active'];
+
+const eventSchema = mongoose.Schema({
   communityId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "communities",
     required: true,
   },
-  eventType: {
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: false,
+  },
+  type: {
     type: String,
     required: true,
   },
@@ -14,14 +25,19 @@ const eventsSchema = mongoose.Schema({
     required: true,
   },
   eventTime:{
-    type: Date,
-    required: true,
-  },
-  eventFile: {
     type: String,
     required: true,
   },
-});
-const events = mongoose.model("events", eventsSchema);
+  attachment: {
+    type: String,
+    required: false,
+  },
+  status: {
+    type: String,
+    enum: statusEnum,
+    default: 'Active'
+  }
+}, { timestamps: true });
+const Event = mongoose.model("event", eventSchema);
 
-module.exports = { events };
+module.exports = { Event };

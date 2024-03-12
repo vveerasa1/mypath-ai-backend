@@ -5,19 +5,27 @@ const resourcesSchema = mongoose.Schema({
     ref: "communities",
     required: true,
   },
-  resourcesName: {
+  name: {
     type: String,
     required: true,
   },
-  resourcesType:{
+  description: {
+    type: String, 
+    required: false
+  },
+  type:{
     type: String,
     required: true,
   },
-  resourcesFile: {
+  attachment: {
     type: String,
     required: true,
   },
-});
-const events = mongoose.model("events", eventsSchema);
+  deleted: {
+    type: Boolean,
+    default: false 
+  }
+}, { timestamps : true});
+const Resource = mongoose.model("events", eventsSchema);
 
-module.exports = { events };
+module.exports = { Resource };
