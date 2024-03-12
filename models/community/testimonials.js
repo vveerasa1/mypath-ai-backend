@@ -5,23 +5,23 @@ const testimonialsSchema = mongoose.Schema({
     ref: "communities",
     required: true,
   },
-  storyName:{
+  title:{
     type: String,
     required: true,
   },
-  storyDescription:{
+  description:{
     type: String,
     required: true,
   },
-  storyDate: {
+  date: {
     type: Date,
     required: true,
   },
-  storyTime:{
-    type: Date,
-    required: true,
+  deleted: {
+    type: Boolean,
+    default: false 
   }
-});
-const testimonials = mongoose.model("testimonials", testimonialsSchema);
+}, {timestamps: true});
+const Testimonial = mongoose.model("testimonials", testimonialsSchema);
 
-module.exports = { testimonials };
+module.exports = { Testimonial };
