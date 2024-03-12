@@ -13,7 +13,6 @@ const userSchema = mongoose.Schema({
   backgroundMode: {
     type: String,
     enum: ["Light","Dark"],
-    default: "Light",
   },
 });
 const user = mongoose.model("users", userSchema);

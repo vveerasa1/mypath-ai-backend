@@ -26,6 +26,6 @@ const resourcesSchema = mongoose.Schema({
     default: false 
   }
 }, { timestamps : true});
-const Resource = mongoose.model("events", eventsSchema);
+const Resource = mongoose.model("resources", resourcesSchema);
 
 module.exports = { Resource };
