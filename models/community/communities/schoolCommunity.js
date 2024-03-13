@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const { Community } = require("../community");
+
 const schoolSchema = mongoose.Schema({
   communityId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -67,6 +69,5 @@ const schoolSchema = mongoose.Schema({
     required:true
   }
 });
-const schoolCommunity = mongoose.model("schoolCommunities", schoolSchema);
-
-module.exports = { schoolCommunity };
+const SchoolCommunity = Community.discriminator("School", schoolSchema);
+module.exports = { SchoolCommunity };

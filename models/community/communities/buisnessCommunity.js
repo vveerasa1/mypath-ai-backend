@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
+const { Community } = require("../community");
+
 const buisnessSchema = mongoose.Schema({
-  communityId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "communities",
-    required: true,
-  },
   buisnessName:{
     type: String,
     required: true,
@@ -72,6 +69,5 @@ const buisnessSchema = mongoose.Schema({
     required:true
   }
 });
-const buisnessCommunity = mongoose.model("buisnessCommunities", buisnessSchema);
-
-module.exports = { buisnessCommunity };
+const BuisnessCommunity = Community.discriminator("Buisness", buisnessSchema);
+module.exports = { BuisnessCommunity };

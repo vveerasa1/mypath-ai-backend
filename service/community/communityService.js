@@ -27,24 +27,24 @@ const createCommunity = async (req, res) => {
       });
     }
   
-    const params = {
-      Bucket: 'mypath--ai/communities',
-      Key: req.file.originalname,
-      Body: req.file.buffer,
-    };
-    const uploadedImageInS3 = await uploadFile(params);
-    const data = new Community({
-      domainId: req.body.domainId,
-      communityName: req.body.communityName,
-      communityImage: uploadedImageInS3.Location,
-      communityType: req.body.communityType,
-      visibility: req.body.visibility
-    });
+    // const params = {
+    //   Bucket: 'mypath--ai/communities',
+    //   Key: req.file.originalname,
+    //   Body: req.file.buffer,
+    // };
+    // const uploadedImageInS3 = await uploadFile(params);
+    // const data = new Community({
+    //   domainId: domains._id,
+    //   communityName: req.body.communityName,
+    //   communityImage: uploadedImageInS3.Location,
+    //   communityType: req.body.communityType,
+    //   visibility: req.body.visibility
+    // });
 
-    await data.validate();
+    // await data.validate();
 
-    const createdCommunity = await data.save();    
-    req.body.communityId = createdCommunity._id;
+    // const createdCommunity = await data.save();    
+    // req.body.communityId = createdCommunity._id;
     const communityType = req.body.communityType;
     if (communityType === "School") {
   
@@ -55,7 +55,7 @@ const createCommunity = async (req, res) => {
         code: 200,
         status: "Success",
         message: "Community Created Successfully",
-        data: { ...createdCommunity, ...createdBuisnessCommunity }
+        data: {}
       });
     }
     else if (communityType === "Others") {
