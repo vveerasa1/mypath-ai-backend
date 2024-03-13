@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 const { Community } = require("../community");
 
 const schoolSchema = mongoose.Schema({
-  communityId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "communities",
-    required: true,
-  },
   address: {
     type: String,
     required: true,
@@ -56,7 +51,7 @@ const schoolSchema = mongoose.Schema({
     type:Boolean,
     required:true
   },
-  careeerResources:{
+  careerResources:{
     type:String,
     required:true
   },

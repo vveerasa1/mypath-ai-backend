@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const { Community } = require("../community");
 
 const otherSchema = mongoose.Schema({
-  communityName:{
-    type:String,
-    required:true
-  },
   topics:{
     type:String,
     required:true

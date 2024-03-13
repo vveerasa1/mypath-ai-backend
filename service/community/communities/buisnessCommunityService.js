@@ -1,9 +1,21 @@
-const { buisnessCommunity } = require("../../../models/community/communities/buisnessCommunity");
+const { BuisnessCommunity } = require("../../../models/community/communities/buisnessCommunity");
+const { uploadFile } = require("../../imageUpload/imageUpload");
+
 const createBuisnessCommunity=async(req)=>
 {
    try{
-    const data = new buisnessCommunity({
-    buisnessName: req.body.buisnessName,
+      const params = {
+      Bucket: 'mypath--ai/communities',
+      Key: req.file.originalname,
+      Body: req.file.buffer,
+    };
+    const uploadedImageInS3 = await uploadFile(params);
+    const data = new BuisnessCommunity({
+    domainId:req.body.domainId,
+    communityName:req.body.communityName,
+    communityImage:uploadedImageInS3.Location,
+    visibility:req.body.visibility,
+    buisnessName:req.body.buisnessName,
     industry:req.body.industry,
     companySize:req.body.companySize,
     address:req.body.address,
@@ -22,41 +34,12 @@ const createBuisnessCommunity=async(req)=>
     enableFeedback:req.body.enableFeedback,
     privacySetting:req.body.privacySetting
   });
-   data.validate();
   result = await data.save();
   return Promise.resolve(result);
 }
 catch(error)
 {
-Promise.reject(error);
+return Promise.reject(error);
 }
 }
 module.exports={createBuisnessCommunity};
-
-
-
-// const { buisnessCommunity } = require("../../../models/community/communities/buisnessCommunity");
-// const createBuisnessCommunity=async(req)=>
-// {
-//    try{
-//     const{ domainId, communityName, communityImage, communityType,visibility}=req.body.createdCommunity;
-//     const data = new buisnessCommunity({
-//     domainId:domainId.toString(),
-//     communityName:communityName,
-//     communityImage:communityImage,
-//     communityType:communityType,
-//     visibility:visibility,
-//     buisnessName: req.body.buisnessName,
-//   });
-//   console.log(data);
-//   //  data.validate();
-//   result = await data.save();
-//   console.log(result);
-//   return Promise.resolve(result);
-// }
-// catch(error)
-// {
-// Promise.reject(error);
-// }
-// }
-// module.exports={createBuisnessCommunity};

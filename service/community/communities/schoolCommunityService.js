@@ -1,34 +1,46 @@
-const { schoolCommunity } = require("../../../models/community/communities/schoolCommunity");
-const createBuisnessCommunity=async(req)=>
+const { SchoolCommunity } = require("../../../models/community/communities/schoolCommunity");
+const { uploadFile } = require("../../imageUpload/imageUpload");
+const createSchoolCommunity=async(req)=>
 {
-   try{
-    const data = new schoolCommunity({
-    buisnessName: req.body.buisnessName,
-    industry:req.body.industry,
-    companySize:req.body.companySize,
-    address:req.body.address,
-    city:req.body.city,
-    state:req.body.state,
-    country:req.body.country,
-    zipcode:req.body.zipcode,
-    email:req.body.email,
-    phoneNo:req.body.phoneNo,
-    keyProducts:req.body.keyProducts,
-    careerOpportunities:req.body.Opportunities,
-    communityGuidelines:req.body.communityGuidelines,
-    networkingOpportunities:req.body.networkingOpportunities,
-    companyOverview:req.body.companyOverview,
-    discussionForums:req.body.discussionForums,
-    enableFeedback:req.body.enableFeedback,
-    privacySetting:req.body.privacySetting
-  });
-  data.validate();
-  result = await data.save();
-  return Promise.resolve(result);
+  try{
+    const params = {
+    Bucket: 'mypath--ai/communities',
+    Key: req.file.originalname,
+    Body: req.file.buffer,
+  };
+  const uploadedImageInS3 = await uploadFile(params);
+  const data = new SchoolCommunity({
+  domainId:req.body.domainId,
+  communityName:req.body.communityName,
+  communityImage:uploadedImageInS3.Location,
+  visibility:req.body.visibility,
+  address:req.body.address,
+  city:req.body.city,
+  state:req.body.state,
+  country:req.body.country,
+  schoolType:req.body.schoolType,
+  email:req.body.email,
+  phoneNo:req.body.phoneNo,
+  educationalPaths:req.body.educationalPaths,
+  communityGuidelines:req.body.communityGuidelines,
+  mentorshipPrograms:req.body.mentorshipPrograms,
+  industryPartnerships:req.body.industryPartnerships,
+  extraCurricularActivities:req.body.extraCurricularActivities,
+  discussionForums:req.body.discussionForums,
+  alumniNetwork:req.body.alumniNetwork,
+  careerResources:req.body.careerResources,
+  enableFeedback:req.body.enableFeedback,
+  privacySetting:req.body.privacySetting,
+  networkingOpportunities:req.body.networkingOpportunities,
+  companyOverview:req.body.companyOverview,
+
+});
+result = await data.save();
+return Promise.resolve(result);
 }
 catch(error)
 {
-Promise.reject(error);
+return Promise.reject(error);
 }
 }
-module.exports={createBuisnessCommunity};
+module.exports={createSchoolCommunity};

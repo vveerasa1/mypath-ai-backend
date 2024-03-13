@@ -4,7 +4,9 @@ const {domain} = require("../../models/domain");
 const { uploadFile } = require("../imageUpload/imageUpload");
 const { createDomain, getDomain } = require("../domain/domainService");
 const { createBuisnessCommunity } = require("../community/communities/buisnessCommunityService")
-
+const { createOtherCommunity } = require("../community/communities/otherCommunityService")
+const { create } = require("../community/communities/otherCommunityService");
+const { createSchoolCommunity } = require("./communities/schoolCommunityService");
 
 const createCommunity = async (req, res) => {
   try{
@@ -26,28 +28,15 @@ const createCommunity = async (req, res) => {
         message: 'Community name already exists.',
       });
     }
-  
-    // const params = {
-    //   Bucket: 'mypath--ai/communities',
-    //   Key: req.file.originalname,
-    //   Body: req.file.buffer,
-    // };
-    // const uploadedImageInS3 = await uploadFile(params);
-    // const data = new Community({
-    //   domainId: domains._id,
-    //   communityName: req.body.communityName,
-    //   communityImage: uploadedImageInS3.Location,
-    //   communityType: req.body.communityType,
-    //   visibility: req.body.visibility
-    // });
-
-    // await data.validate();
-
-    // const createdCommunity = await data.save();    
-    // req.body.communityId = createdCommunity._id;
     const communityType = req.body.communityType;
     if (communityType === "School") {
-  
+      const createdOtherCommunity = await createSchoolCommunity(req);
+      res.status(200).json({
+        code: 200,
+        status: "Success",
+        message: "Community Created Successfully",
+        data:createdOtherCommunity
+      });
     }
     else if (communityType === "Buisness") {
       const createdBuisnessCommunity = await createBuisnessCommunity(req);
@@ -55,11 +44,20 @@ const createCommunity = async (req, res) => {
         code: 200,
         status: "Success",
         message: "Community Created Successfully",
-        data: {}
+        data:createdBuisnessCommunity
       });
     }
     else if (communityType === "Others") {
-  
+      const createdOtherCommunity = await createOtherCommunity(req);
+      res.status(200).json({
+        code: 200,
+        status: "Success",
+        message: "Community Created Successfully",
+        data:createdOtherCommunity
+      });
+    }
+    else{
+      throw new Error("Give a Valid Community Type");
     }
   } catch(error) {
     console.error('Error:', error);
