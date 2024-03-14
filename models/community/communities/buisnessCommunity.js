@@ -66,8 +66,7 @@ const buisnessSchema = mongoose.Schema({
   },
   privacySetting:{
     type:String,
-    required:true
-  }
+    }
 });
 const BuisnessCommunity = Community.discriminator("Buisness", buisnessSchema);
 module.exports = { BuisnessCommunity };

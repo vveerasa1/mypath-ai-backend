@@ -39,9 +39,8 @@ const otherSchema = mongoose.Schema({
     required:true
   },
   privacy:{
-    type:Boolean,
-    required:true
-  },
+    type:Boolean
+      },
 
 });
 const OtherCommunity = Community.discriminator("Others", otherSchema);

@@ -61,7 +61,6 @@ const schoolSchema = mongoose.Schema({
   },
   privacySetting:{
     type:String,
-    required:true
   }
 });
 const SchoolCommunity = Community.discriminator("School", schoolSchema);
