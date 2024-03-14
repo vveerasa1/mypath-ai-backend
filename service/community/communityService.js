@@ -76,7 +76,7 @@ const getAllCommunities = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const { domainIds, visibility } = req.query;
+    const { domainIds, visibility,startsWith } = req.query;
     const domainIdsArray = domainIds ? domainIds.split(",") : [];
     let filter = {};
 
@@ -87,7 +87,10 @@ const getAllCommunities = async (req, res) => {
     if (visibility) {
       filter.visibility = visibility;
     }
-
+    if(startsWith)
+    {
+      filter.communityName = { $regex: `^${startsWith}`};
+    }
     const communities = await Community.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
