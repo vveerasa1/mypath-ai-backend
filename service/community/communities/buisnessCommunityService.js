@@ -1,6 +1,5 @@
 const { BuisnessCommunity } = require("../../../models/community/communities/buisnessCommunity");
 const { uploadFile } = require("../../imageUpload/imageUpload");
-
 const createBuisnessCommunity=async(req)=>
 {
    try{
@@ -34,8 +33,7 @@ const createBuisnessCommunity=async(req)=>
     enableFeedback:req.body.enableFeedback,
     privacySetting:req.body.privacySetting
   });
-  result = await data.save();
-  return Promise.resolve(result);
+  return Promise.resolve(data);
 }
 catch(error)
 {

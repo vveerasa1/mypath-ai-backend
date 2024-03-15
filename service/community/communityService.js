@@ -42,23 +42,36 @@ const createCommunity = async (req, res) => {
     switch (communityType) {
       case "School":
         createdCommunity = await createSchoolCommunity(req);
+        createdCommunity=await createOrUpdateCommunity(req,createdCommunity);
         break;
       case "Buisness":
         createdCommunity = await createBuisnessCommunity(req);
+        createdCommunity=await createOrUpdateCommunity(req,createdCommunity);
         break;
       case "Others":
         createdCommunity = await createOtherCommunity(req);
+        createdCommunity=await createOrUpdateCommunity(req,createdCommunity);
         break;
       default:
         throw new Error("Give a Valid Community Type");
     }
-
+    if(req.body.communityId)
+    {
+    res.status(200).json({
+      code: 200,
+      status: "Success",
+      message: "Community Updated Successfully",
+      data: createdCommunity,
+    });
+  }
+  else{
     res.status(200).json({
       code: 200,
       status: "Success",
       message: "Community Created Successfully",
       data: createdCommunity,
     });
+  }
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({
@@ -135,6 +148,34 @@ const getCommunityById = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+};
+const createOrUpdateCommunity= async (req,data)=>{
+  try{
+  let result;
+  if (req.body.communityId) {
+    let _isCommunityPresent = await Community.findOne({
+      _id: req.body.communityId,
+    });
+    if (_isCommunityPresent) {
+      const { _id, ...updatedData } = data.toObject();
+      result = await Community.findOneAndUpdate(
+        { _id:req.body.communityId},
+        updatedData,
+        { new: true }
+      );
+      return Promise.resolve(result);
+    } else {
+      throw new Error("Community is not present");
+    }
+  } else {
+    result = await data.save();
+    return Promise.resolve(result);
+  }
+}
+catch(error)
+{
+  return Promise.reject(error);
+}
 };
 
 module.exports = {

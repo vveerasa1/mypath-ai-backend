@@ -1,5 +1,7 @@
 const { OtherCommunity } = require("../../../models/community/communities/otherCommunity");
+const { Community } = require("../../../models/community/community");
 const { uploadFile } = require("../../imageUpload/imageUpload");
+
 const createOtherCommunity=async(req)=>
 {
    try{
@@ -25,8 +27,7 @@ const createOtherCommunity=async(req)=>
     enableFeedback:req.body.enableFeedback,
     privacy:req.body.privacy,
   });
-  result = await data.save();
-  return Promise.resolve(result);
+  return Promise.resolve(data);
 }
 catch(error)
 {
