@@ -19,6 +19,11 @@ const communitySchema = mongoose.Schema({
     type: String,
     enum: ["Public","Private"],
     default: 'Private'
+  },
+  status: {
+    type: String,
+    enum: ['Active', 'Deleted'],
+    default: 'Active'
   }
 },{ discriminatorKey:"communityType"});
 const Community = mongoose.model("communities", communitySchema);

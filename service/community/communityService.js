@@ -134,8 +134,45 @@ const getCommunityById = async (req, res) => {
   }
 };
 
+const deleteCommunity = async (req, res) => {
+  const communityId = req.params.communityId;
+
+  try {
+    const deletedCommunity = await Community.findByIdAndUpdate(
+      communityId,
+      { $set: { status: 'Deleted' } },
+      { new: true, runValidators: true }
+    );
+
+    if (!deletedCommunity) {
+      res.status(404).json({
+        code: 404,
+        status: 'Not Found',
+        message: 'Community not found',
+      });
+    }
+
+    res.status(200).json({
+      code: 200,
+      status: 'Success',
+      message: 'Community has been deleted successfully!',
+      data: deletedCommunity,
+    });
+  } catch (error) {
+    console.error('Error:', error);
+
+    res.status(500).json({
+      code: 500,
+      status: 'Error',
+      message: 'Failed to delete community',
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   createCommunity,
   getAllCommunities,
   getCommunityById,
+  deleteCommunity,
 };
