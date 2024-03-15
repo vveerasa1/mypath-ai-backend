@@ -52,7 +52,7 @@ const schoolSchema = mongoose.Schema({
     required: true,
   },
   careerResources: {
-    type: String,
+    type:[String],
     required: true,
   },
   enableFeedback: {
