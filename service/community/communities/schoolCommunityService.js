@@ -18,6 +18,7 @@ const createSchoolCommunity=async(req)=>
   city:req.body.city,
   state:req.body.state,
   country:req.body.country,
+  zipCode:req.body.zipCode,
   schoolType:req.body.schoolType,
   email:req.body.email,
   phoneNo:req.body.phoneNo,

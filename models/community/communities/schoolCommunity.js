@@ -10,12 +10,12 @@ const schoolSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  state: { type: String,
-    required: true
+  state: { type: String, required: true },
+  zipCode: {
+    type: String,
+    required: true,
   },
-  country: { type: String,
-    required: true
-  },
+  country: { type: String, required: true },
   schoolType: {
     type: String,
     required: true,
@@ -24,44 +24,44 @@ const schoolSchema = mongoose.Schema({
     type: String, //doubt
     required: true,
   },
-  email:{
+  email: {
     type: String, //doubt
     required: true,
   },
-  phoneNo:{
+  phoneNo: {
     type: String, //doubt
     required: true,
   },
-  communityGuidelines:{
+  communityGuidelines: {
     type: String,
   },
-  mentorshipPrograms:{
+  mentorshipPrograms: {
     type: String, //doubt
   },
-  industryPartnerships:{
+  industryPartnerships: {
     type: String, //doubt
   },
-  extraCurricularActivities:{
+  extraCurricularActivities: {
     type: String, //doubt
   },
-  alumniNetwork:{
+  alumniNetwork: {
     type: String, //doubt
   },
-  discussionForums:{
-    type:Boolean,
-    required:true
+  discussionForums: {
+    type: Boolean,
+    required: true,
   },
-  careerResources:{
-    type:String,
-    required:true
+  careerResources: {
+    type: String,
+    required: true,
   },
-  enableFeedback:{
-    type:Boolean,
-    required:true
+  enableFeedback: {
+    type: Boolean,
+    required: true,
   },
-  privacySetting:{
-    type:String,
-  }
+  privacySetting: {
+    type: String,
+  },
 });
 const SchoolCommunity = Community.discriminator("School", schoolSchema);
 module.exports = { SchoolCommunity };
