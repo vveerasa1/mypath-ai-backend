@@ -29,7 +29,7 @@ const createSchoolCommunity = async (req) => {
       mentorshipPrograms: req.body.mentorshipPrograms,
       industryPartnerships: req.body.industryPartnerships,
       extraCurricularActivities: req.body.extraCurricularActivities,
-      discussionForums: req.body.discussionForums,
+      discussionForms: req.body.discussionForms,
       alumniNetwork: req.body.alumniNetwork,
       careerResources: req.body.careerResources,
       enableFeedback: req.body.enableFeedback,

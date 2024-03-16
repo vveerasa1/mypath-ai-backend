@@ -28,7 +28,7 @@ const createBusinessCommunity=async(req)=>
     communityGuidelines:req.body.communityGuidelines,
     networkingOpportunities:req.body.networkingOpportunities,
     companyOverview:req.body.companyOverview,
-    discussionForums:req.body.discussionForums,
+    discussionForms:req.body.discussionForms,
     enableFeedback:req.body.enableFeedback,
     privacySetting:req.body.privacySetting
   });

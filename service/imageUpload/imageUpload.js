@@ -4,7 +4,8 @@ const config = require("../../config");
 const s3 = new AWS.S3({
   accessKeyId: config.aws.AccessKeyId,
   secretAccessKey: config.aws.secretAccessKey,
-  region:'us-west-2'
+  region:'us-west-2',
+  ACL: "public-read",
 });
 
 const uploadFile = async (parameters) => {

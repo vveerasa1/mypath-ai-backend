@@ -47,7 +47,7 @@ const schoolSchema = mongoose.Schema({
   alumniNetwork: {
     type: String, //doubt
   },
-  discussionForums: {
+  discussionForms: {
     type: Boolean,
     required: true,
   },

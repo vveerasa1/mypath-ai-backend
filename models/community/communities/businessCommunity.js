@@ -52,7 +52,7 @@ const businessSchema = mongoose.Schema({
   companyOverview:{
     type: String, //doubt
   },
-  discussionForums:{
+  discussionForms:{
     type:Boolean,
     required:true
   },
