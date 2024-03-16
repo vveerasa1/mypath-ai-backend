@@ -15,6 +15,7 @@ const createOtherCommunity=async(req)=>
     domainId:req.body.domainId,
     communityName:req.body.communityName,
     communityImage:uploadedImageInS3.Location,
+    description:req.body.description,
     visibility:req.body.visibility,
     topics:req.body.topics,
     rules:req.body.rules,

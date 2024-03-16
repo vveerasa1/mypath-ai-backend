@@ -6,6 +6,10 @@ const otherSchema = mongoose.Schema({
     type:String,
     required:true
   },
+  description:{
+    type:String,
+    required:true
+  },
   rules:{
     type:String,
     required:true
