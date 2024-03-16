@@ -14,7 +14,6 @@ const createBusinessCommunity=async(req)=>
     communityName:req.body.communityName,
     communityImage:uploadedImageInS3.Location,
     visibility:req.body.visibility,
-    businessName:req.body.businessName,
     industry:req.body.industry,
     companySize:req.body.companySize,
     address:req.body.address,

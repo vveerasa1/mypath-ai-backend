@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const { Community } = require("../community");
 
 const businessSchema = mongoose.Schema({
-  businessName:{
-    type: String,
-    required: true,
-  },
   industry:{
     type: String,
     required: true,
