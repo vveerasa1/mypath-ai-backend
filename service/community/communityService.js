@@ -4,8 +4,8 @@ const { domain } = require("../../models/domain");
 const { uploadFile } = require("../imageUpload/imageUpload");
 const { createDomain, getDomain } = require("../domain/domainService");
 const {
-  createBuisnessCommunity,
-} = require("../community/communities/buisnessCommunityService");
+  createBusinessCommunity,
+} = require("../community/communities/businessCommunityService");
 const {
   createOtherCommunity,
 } = require("../community/communities/otherCommunityService");
@@ -44,8 +44,8 @@ const createCommunity = async (req, res) => {
         createdCommunity = await createSchoolCommunity(req);
         createdCommunity=await createOrUpdateCommunity(req,createdCommunity);
         break;
-      case "Buisness":
-        createdCommunity = await createBuisnessCommunity(req);
+      case "Business":
+        createdCommunity = await createBusinessCommunity(req);
         createdCommunity=await createOrUpdateCommunity(req,createdCommunity);
         break;
       case "Others":
@@ -102,7 +102,7 @@ const getAllCommunities = async (req, res) => {
     }
     if(startsWith)
     {
-      filter.communityName = { $regex: `^${startsWith}`};
+      filter.communityName = { $regex: `^${startsWith}`,$options: 'i'};
     }
     const communities = await Community.find(filter)
       .sort({ createdAt: -1 })

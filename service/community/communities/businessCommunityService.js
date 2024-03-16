@@ -1,6 +1,6 @@
-const { BuisnessCommunity } = require("../../../models/community/communities/buisnessCommunity");
+const { BusinessCommunity } = require("../../../models/community/communities/businessCommunity");
 const { uploadFile } = require("../../imageUpload/imageUpload");
-const createBuisnessCommunity=async(req)=>
+const createBusinessCommunity=async(req)=>
 {
    try{
       const params = {
@@ -9,12 +9,12 @@ const createBuisnessCommunity=async(req)=>
       Body: req.file.buffer,
     };
     const uploadedImageInS3 = await uploadFile(params);
-    const data = new BuisnessCommunity({
+    const data = new BusinessCommunity({
     domainId:req.body.domainId,
     communityName:req.body.communityName,
     communityImage:uploadedImageInS3.Location,
     visibility:req.body.visibility,
-    buisnessName:req.body.buisnessName,
+    businessName:req.body.businessName,
     industry:req.body.industry,
     companySize:req.body.companySize,
     address:req.body.address,
@@ -40,4 +40,4 @@ catch(error)
 return Promise.reject(error);
 }
 }
-module.exports={createBuisnessCommunity};
+module.exports={createBusinessCommunity};

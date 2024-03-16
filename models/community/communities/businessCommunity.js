@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const { Community } = require("../community");
 
-const buisnessSchema = mongoose.Schema({
-  buisnessName:{
+const businessSchema = mongoose.Schema({
+  businessName:{
     type: String,
     required: true,
   },
@@ -68,5 +68,5 @@ const buisnessSchema = mongoose.Schema({
     type:String,
     }
 });
-const BuisnessCommunity = Community.discriminator("Buisness", buisnessSchema);
-module.exports = { BuisnessCommunity };
+const BusinessCommunity = Community.discriminator("Business", businessSchema);
+module.exports = { BusinessCommunity };
