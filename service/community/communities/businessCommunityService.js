@@ -27,7 +27,7 @@ const createBusinessCommunity=async(req)=>
     email:req.body.email,
     phoneNo:req.body.phoneNo,
     keyProducts:req.body.keyProducts,
-    careerOpportunities:req.body.Opportunities,
+    careerOpportunities:req.body.careerOpportunities,
     communityGuidelines:req.body.communityGuidelines,
     networkingOpportunities:req.body.networkingOpportunities,
     companyOverview:req.body.companyOverview,
