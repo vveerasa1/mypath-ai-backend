@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllCommunities, createCommunity, getCommunityById } = require("../service/community/communityService");
+const { getAllCommunities, createCommunity, getCommunityById, deleteCommunity } = require("../service/community/communityService");
 const { addEvent, getEvent, getEvents, updateEvent, deleteEvent, cancelEvent } = require("../service/community/eventService");
 const { addResource, getResources, getResource, updateResource, deleteResource } = require("../service/community/resourceService");
 const { addTestimonial, getTestimonial, getTestimonials, updateTestimonial, deleteTestimonial } = require("../service/community/testimonialService")
@@ -18,6 +18,7 @@ router.post("/",[file.single('file'),createCommunity]);
 router.post("/:communityId/trailblazer-criteria",verifyToken,createTrailblazerCriteria);
 router.get("/",getAllCommunities);
 router.get("/:communityId",getCommunityById);
+router.delete("/:communityId", deleteCommunity);
 router.post("/:communityId/events", [file.single('file'), addEvent]);
 router.get("/:communityId/events/:eventId", getEvent);
 router.get("/:communityId/events", getEvents);
