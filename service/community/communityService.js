@@ -209,21 +209,24 @@ const deleteCommunity = async (req, res) => {
       { $set: { status: 'Deleted' } },
       { new: true, runValidators: true }
     );
-
-    if (!deletedCommunity) {
-      res.status(404).json({
-        code: 404,
-        status: 'Not Found',
-        message: 'Community not found',
+    if (deletedCommunity) {
+      res.status(200).json({
+        code: 200,
+        status: 'Success',
+        message: 'Community has been deleted successfully!',
+        data: deletedCommunity,
+      });
+    }
+    else
+    {
+      res.status(500).json({
+        code: 500,
+        status: 'Error',
+        message: 'Failed to delete community',
       });
     }
 
-    res.status(200).json({
-      code: 200,
-      status: 'Success',
-      message: 'Community has been deleted successfully!',
-      data: deletedCommunity,
-    });
+  
   } catch (error) {
     console.error('Error:', error);
 
