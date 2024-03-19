@@ -5,16 +5,19 @@ const { uploadFile } = require("../../imageUpload/imageUpload");
 
 const createSchoolCommunity = async (req) => {
   try {
+    let uploadedImageInS3;
+    if(req.file){
     const params = {
       Bucket: "mypath--ai/communities",
       Key: req.file.originalname,
       Body: req.file.buffer,
     };
-    const uploadedImageInS3 = await uploadFile(params);
+    uploadedImageInS3= await uploadFile(params);
+  }
     const data = new SchoolCommunity({
       domainId: req.body.domainId,
       communityName: req.body.communityName,
-      communityImage: uploadedImageInS3.Location,
+      communityImage: uploadedImageInS3?uploadedImageInS3.Location:undefined,
       visibility: req.body.visibility,
       address: req.body.address,
       city: req.body.city,

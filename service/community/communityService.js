@@ -1,8 +1,5 @@
 const { Community } = require("../../models/community/community");
 const { domain } = require("../../models/domain");
-
-const { uploadFile } = require("../imageUpload/imageUpload");
-const { createDomain, getDomain } = require("../domain/domainService");
 const {
   createBusinessCommunity,
 } = require("../community/communities/businessCommunityService");
@@ -13,6 +10,10 @@ const { create } = require("../community/communities/otherCommunityService");
 const {
   createSchoolCommunity,
 } = require("./communities/schoolCommunityService");
+const { SchoolCommunity } = require("../../models/community/communities/schoolCommunity");
+const { BusinessCommunity } = require("../../models/community/communities/businessCommunity");
+const { OtherCommunity } = require("../../models/community/communities/otherCommunity");
+
 
 const createCommunity = async (req, res) => {
   try {
@@ -158,11 +159,32 @@ const createOrUpdateCommunity= async (req,data)=>{
     });
     if (_isCommunityPresent) {
       const { _id, ...updatedData } = data.toObject();
-      result = await Community.findOneAndUpdate(
+      const communityType = req.body.communityType;
+      switch (communityType) {
+      case "School":
+      result = await SchoolCommunity.findOneAndUpdate(
         { _id:req.body.communityId},
         updatedData,
         { new: true }
       );
+      break;
+      case "Business":
+      result = await BusinessCommunity.findOneAndUpdate(
+        { _id:req.body.communityId},
+        updatedData,
+        { new: true }
+      );
+      break;
+      case "Others":
+      result = await OtherCommunity.findOneAndUpdate(
+        { _id:req.body.communityId},
+        updatedData,
+        { new: true }
+      );
+      break;
+      default:
+      throw new Error("Enter a Valid Community Type");
+      }
       return Promise.resolve(result);
     } else {
       throw new Error("Community is not present");

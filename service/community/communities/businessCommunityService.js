@@ -3,16 +3,19 @@ const { uploadFile } = require("../../imageUpload/imageUpload");
 const createBusinessCommunity=async(req)=>
 {
    try{
-      const params = {
-      Bucket: 'mypath--ai/communities',
+    let uploadedImageInS3;
+    if(req.file){
+    const params = {
+      Bucket: "mypath--ai/communities",
       Key: req.file.originalname,
       Body: req.file.buffer,
     };
-    const uploadedImageInS3 = await uploadFile(params);
+    uploadedImageInS3= await uploadFile(params);
+  }
     const data = new BusinessCommunity({
     domainId:req.body.domainId,
     communityName:req.body.communityName,
-    communityImage:uploadedImageInS3.Location,
+    communityImage: uploadedImageInS3?uploadedImageInS3.Location:undefined,
     visibility:req.body.visibility,
     industry:req.body.industry,
     companySize:req.body.companySize,
