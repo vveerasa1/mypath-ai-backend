@@ -92,7 +92,7 @@ const getAllCommunities = async (req, res) => {
 
     const { domainIds, visibility,startsWith } = req.query;
     const domainIdsArray = domainIds ? domainIds.split(",") : [];
-    let filter = {};
+    let filter = {status:"Active"};
 
     if (domainIdsArray.length > 0) {
       filter.domainId = { $in: domainIdsArray };
