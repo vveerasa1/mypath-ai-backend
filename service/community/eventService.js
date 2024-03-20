@@ -1,4 +1,4 @@
-const { community } = require("../../models/community/community");
+const { Community } = require("../../models/community/community");
 const { Event } = require("../../models/community/events");
 const { uploadFile } = require("../imageUpload/imageUpload");
 
@@ -11,7 +11,12 @@ const { uploadFile } = require("../imageUpload/imageUpload");
  */
 const addEvent = async (req, res) => {
     try {
-      let attachment = '';
+      const community=await Community.find(req.params.communityId);
+      if(!community)
+      {
+        throw new Error("Cannot Find Community")
+      }
+      let attachment =null;
       if (req.file) {
         const params = {
           Bucket: 'mypath--ai/communities/events',
@@ -161,6 +166,11 @@ const addEvent = async (req, res) => {
    * @returns 
    */
   const updateEvent = async (req, res) => {
+    const community=await Community.find(req.params.communityId);
+    if(!community)
+    {
+      throw new Error("Cannot Find Community")
+    }
     const eventId = req.params.eventId;
   
     try {
