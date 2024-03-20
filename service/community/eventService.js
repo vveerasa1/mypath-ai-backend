@@ -34,7 +34,7 @@ const addEvent = async (req, res) => {
       });
   
       const result = await event.save();
-      console.log(`Event has been added for the community ${communityId}: ${event._id}`)
+      console.log(`Event has been added for the community ${event.communityId}: ${event._id}`)
       res.status(200).json({
         code: 200,
         status: 'Success',
@@ -42,7 +42,7 @@ const addEvent = async (req, res) => {
         data: result,
       });
     } catch (error) {
-      console.error(`Error adding event for the community ${communityId}: ${error}`);
+      console.error(`Error adding event for the community ${req.params.communityId}: ${error}`);
   
       res.status(500).json({
         code: 500,
