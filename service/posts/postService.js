@@ -33,9 +33,14 @@ const createUserPost = async (req) => {
   try {
     const userId = req.body.userId;
     const requestedUser = await user.findById(userId);
+    if(!requestedUser)
+    {
+     throw new Error("User Not Found");
+    }
     let createdUserPost = new Posts({
       description: req.body.description,
       createdDate: new Date(),
+      userId:requestedUser._id
     });
 
     // session.startTransaction();
@@ -50,12 +55,9 @@ const createUserPost = async (req) => {
     }
     if (requestedUser) {
       const createdPost = await createdUserPost.save();
-      requestedUser.posts.push(createdUserPost._id);
       await requestedUser.save();
       // await session.commitTransaction();
       return createdPost;
-    } else {
-      throw new Error("Community was not Found");
     }
   } catch (error) {
     // await session.abortTransaction();
@@ -69,9 +71,14 @@ const createCommunityPost = async (req) => {
   try {
     const communityId = req.body.communityId;
     const community = await Community.findById(communityId);
+    if(!community)
+    {
+      throw new Error("Cannot Find Community");
+    }
     let createdCommunityPost = new Posts({
       description: req.body.description,
       createdDate: new Date(),
+      communityId:community._id
     });
 
     // session.startTransaction();
@@ -86,12 +93,9 @@ const createCommunityPost = async (req) => {
     }
     if (community) {
       const createdPost = await createdCommunityPost.save();
-      community.posts.push(createdCommunityPost._id);
       await community.save();
       // await session.commitTransaction();
       return createdPost;
-    } else {
-      throw new Error("Community was not Found");
     }
   } catch (error) {
     // await session.abortTransaction();
@@ -111,7 +115,8 @@ const getAllPosts = async (req, res) => {
       },
       {
         $addFields: {
-          liked: { $in: [new mongoose.Types.ObjectId(userId), "$likes"] },
+          liked: { $in: [userId, "$likes"] },
+          flag: { $in: [userId, "$flag"] },
           likes: { $size: "$likes" }
         }
       }
@@ -159,7 +164,7 @@ const likeapost=async(req,res)=>{
     code: 200,
     status: "Success",
     data:{
-      Liked:!hasAlreadyLikedThePost,
+      liked:!hasAlreadyLikedThePost,
       likes:likes
     }
   });
@@ -176,7 +181,46 @@ const likeapost=async(req,res)=>{
 
 const flagapost=async(req,res)=>
 {
-
+  try{
+    const postId=req.params.postId;
+    const posts = await Posts.findById(postId);
+    if(!posts)
+    {
+      throw new Error("Cannot find the Post");
+    }
+    const cognitoUserId=await getcognitoUserId(req);
+    const userDetails=await user.findOne({cognitoUserId:cognitoUserId});
+    if(!userDetails)
+    {
+      throw new Error("Cannot find the User");
+    }
+    const hasAlreadyFlaggedThePost=posts.flag.find(_id=>_id.equals(userDetails._id));
+    console.log(hasAlreadyFlaggedThePost);
+    if(hasAlreadyFlaggedThePost)
+    {
+      posts.flag.pop(userDetails._id);
+      await posts.save();
+    }
+    else{
+    posts.flag.push(userDetails._id);
+    await posts.save();
+    }
+    res.status(200).json({
+      code: 200,
+      status: "Success",
+      data:{
+        flagged:!hasAlreadyFlaggedThePost
+      }
+    });
+    }
+    catch(error)
+    {
+      res.status(500).json({
+        code: 500,
+        status: "Failed",
+        message: error.message,
+      });
+    }
 };
 
-module.exports = { createPosts, getAllPosts,likeapost};
+module.exports = { createPosts, getAllPosts,likeapost,flagapost};

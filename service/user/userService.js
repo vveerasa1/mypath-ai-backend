@@ -60,22 +60,26 @@ const followCommunity=async(req,res)=>
     const cognitoUserId=await getcognitoUserId(req);
 
   let communityId;
-  if(req.params.communityId)
+  if(!req.params.communityId)
   {
-    communityId=req.params.communityId;
-  }
-  else{
     throw new Error("Please Give a CommunityId");
   }
+  communityId=req.params.communityId;
   const community=await Community.findById(communityId);
-  const userDetails = await user.findOne({cognitoUserId:cognitoUserId});
-  if(community&&userDetails)
+  if(!community)
   {
-    const following=userDetails.communities.find(_id=>_id.equals(community._id))&&community.followers.find(_id=>_id.equals(userDetails._id))?false:true;
+    throw new Error("Cannot Find Commmunity");
+  }
+  const userDetails = await user.findOne({cognitoUserId:cognitoUserId});
+  if(!userDetails)
+  {
+    throw new Error("Cannot Find The User");
+  }
+    const following=userDetails.communities.find(_id=>_id.equals(community._id))?false:true;
+    console.log()
     if(following)
     {
       userDetails.communities.push(community._id);
-      community.followers.push(userDetails._id);
       await userDetails.save();
       await community.save();
       res.status(200).json({
@@ -87,7 +91,6 @@ const followCommunity=async(req,res)=>
     }
     else{
     userDetails.communities.pop(community._id);
-    community.followers.pop(userDetails._id);
     await userDetails.save();
     await community.save();
     res.status(200).json({
@@ -98,15 +101,7 @@ const followCommunity=async(req,res)=>
     })
     }
   }
-  else if(community)
-  {
-    throw new Error("User Cannot be found");
-  }
-  else
-  {
-    throw new Error("Community Cannot be found");
-  }
-}
+
 catch(error)
 {
   res.status(500).json({

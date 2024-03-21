@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.post("/",verifyToken,createUserSettings);
 router.get("/",verifyToken,getUserSettings);
-router.get("/follow/communities/:communityId",verifyToken,followCommunity);
-router.get("/follow/users/:followerId",verifyToken,followUser);
+router.get("/:communityId/follow/communities",verifyToken,followCommunity);
+router.get("/:followerId/follow/users",verifyToken,followUser);
 module.exports = router;

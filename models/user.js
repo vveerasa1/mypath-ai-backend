@@ -14,10 +14,6 @@ const userSchema = mongoose.Schema({
     type: String,
     enum: ["Light","Dark"],
   },
-  posts:{
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "posts"
-    },
   communities:{
     type: [mongoose.Schema.Types.ObjectId],
     ref: "communities"

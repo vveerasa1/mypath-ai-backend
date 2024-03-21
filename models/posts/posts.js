@@ -1,17 +1,24 @@
 const mongoose = require("mongoose");
-const { Comments } = require("./comments");
 const postsSchema = mongoose.Schema({
  description:{
   type:String
  },
- comments:{
-   type: [mongoose.Schema.Types.ObjectId],
-   ref: "comments"
+ communityId:{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "communities"
+ },
+ userId:{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "users"
  },
  likes:{
    type: [mongoose.Schema.Types.ObjectId],
    ref: "users"
  },
+ flag:{
+  type: [mongoose.Schema.Types.ObjectId],
+  ref: "users"
+},
  createdDate:{
     type:Date,
     required:true
