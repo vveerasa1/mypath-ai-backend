@@ -13,6 +13,10 @@ const testimonialsSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  time:{
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     required: true,

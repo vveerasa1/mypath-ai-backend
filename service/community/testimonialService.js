@@ -9,7 +9,8 @@ const addTestimonial = async (req, res) => {
         communityId: req.params.communityId,
         title: req.body.title,
         description: req.body.description,
-        date: req.body.date
+        date: req.body.date,
+        time:req.body.time
       });
   
       const result = await testimonial.save();
@@ -116,6 +117,7 @@ const addTestimonial = async (req, res) => {
           communityId: req.params.communityId,
           title: req.body.title,
           description: req.body.description,
+          time:req.body.time,
           date: req.body.date,
         }},
         { new: true, runValidators: true }
