@@ -11,7 +11,7 @@ const { uploadFile } = require("../imageUpload/imageUpload");
  */
 const addEvent = async (req, res) => {
     try {
-      const community=await Community.find(req.params.communityId);
+      const community=await Community.findById(req.params.communityId);
       if(!community)
       {
         throw new Error("Cannot Find Community")
@@ -166,7 +166,7 @@ const addEvent = async (req, res) => {
    * @returns 
    */
   const updateEvent = async (req, res) => {
-    const community=await Community.find(req.params.communityId);
+    const community=await Community.findById(req.params.communityId);
     if(!community)
     {
       throw new Error("Cannot Find Community")
