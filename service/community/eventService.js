@@ -71,7 +71,7 @@ const addEvent = async (req, res) => {
       const limit = parseInt(req.query.limit) || 10;
   
       const skip = (page - 1) * limit;
-      const filter = {};
+      const filter = { $in: ["Active", "Cancelled"] };
     
     if (req.query.status) {
       filter.status = req.query.status;
