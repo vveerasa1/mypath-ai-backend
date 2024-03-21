@@ -24,7 +24,15 @@ const communitySchema = mongoose.Schema({
     type: String,
     enum: ['Active', 'Deleted'],
     default: 'Active'
-  }
+  },
+  posts:{
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "posts"
+    },
+  followers:{
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "users"
+    }
 },{ discriminatorKey:"communityType"});
 const Community = mongoose.model("communities", communitySchema);
 

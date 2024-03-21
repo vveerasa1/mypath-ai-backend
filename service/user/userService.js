@@ -1,12 +1,13 @@
+const { Community } = require("../../models/community/community");
 const {user} = require("../../models/user");
 const { jwtDecode }= require('jwt-decode');
+const mongoose = require('mongoose');
 
 const createUserSettings = async (req, res) => {
   try {
-  const token = req.header('x-auth-token');
-  const decodedToken = jwtDecode(token);
+  const cognitoUserId=await getcognitoUserId(req);
   const data = new user({
-    cognitoUserId:decodedToken.sub,
+    cognitoUserId:cognitoUserId,
     language:req.body.language,
     backgroundMode:req.body.backgroundMode
   });
@@ -53,7 +54,132 @@ const getUserSettings = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+const followCommunity=async(req,res)=>
+{
+  try{
+    const cognitoUserId=await getcognitoUserId(req);
+
+  let communityId;
+  if(req.params.communityId)
+  {
+    communityId=req.params.communityId;
+  }
+  else{
+    throw new Error("Please Give a CommunityId");
+  }
+  const community=await Community.findById(communityId);
+  const userDetails = await user.findOne({cognitoUserId:cognitoUserId});
+  if(community&&userDetails)
+  {
+    const following=userDetails.communities.find(_id=>_id.equals(community._id))&&community.followers.find(_id=>_id.equals(userDetails._id))?false:true;
+    if(following)
+    {
+      userDetails.communities.push(community._id);
+      community.followers.push(userDetails._id);
+      await userDetails.save();
+      await community.save();
+      res.status(200).json({
+        code:200,
+        status:"Success",
+        message:`Following the Community ${community.communityName}`,
+        data:{following:following}
+      })
+    }
+    else{
+    userDetails.communities.pop(community._id);
+    community.followers.pop(userDetails._id);
+    await userDetails.save();
+    await community.save();
+    res.status(200).json({
+      code:200,
+      status:"Success",
+      message:`UnFollowed the Community ${community.communityName}`,
+      data:{following:following}
+    })
+    }
+  }
+  else if(community)
+  {
+    throw new Error("User Cannot be found");
+  }
+  else
+  {
+    throw new Error("Community Cannot be found");
+  }
+}
+catch(error)
+{
+  res.status(500).json({
+    code:500,
+    status:"Failed",
+    message:error.message
+  })
+}
+}
+const followUser=async(req,res)=>
+{
+  try{
+  const followerUserId= req.params.followerId;
+  const cognitoUserId=  await getcognitoUserId(req);
+  const userDetails = await user.findOne({cognitoUserId:cognitoUserId});
+  if(!userDetails)
+  {
+    throw new Error("User Not Found");
+  }
+  const followerDetails = await user.findById(followerUserId);
+  if(!followerDetails)
+  {
+    throw new Error("Follower Not Found");
+  }
+  const following=userDetails.following.find(_id=>_id.equals(followerDetails._id))?false:true;
+  if(following)
+  {
+    userDetails.following.push(followerDetails._id);
+    await userDetails.save();
+    res.status(200).json({
+      code:200,
+      status:"Success",
+      message:`Following the User ${followerDetails._id}`,
+      data:{following:following}
+    })
+  }
+  else{
+    userDetails.following.pop(followerDetails._id);
+    await userDetails.save();
+    res.status(200).json({
+      code:200,
+      status:"Success",
+      message:`UnFollowed the User ${followerDetails._id}`,
+      data:{following:following}
+    })
+  }
+
+  }
+  catch(error)
+{
+  res.status(500).json({
+    code:500,
+    status:"Failed",
+    message:error.message
+  })
+}
+};
+const getcognitoUserId=async(req)=>
+{
+  try{
+  const token = req.header('x-auth-token');
+  const decodedToken = jwtDecode(token);
+  return decodedToken.sub;
+  }
+  catch(error)
+  {
+    throw new Error(error);
+  }
+};
 module.exports = {
     createUserSettings,
-    getUserSettings
+    getUserSettings,
+    followCommunity,
+    followUser,
+    getcognitoUserId
 };
