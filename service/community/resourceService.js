@@ -104,7 +104,7 @@ const addResource = async (req, res) => {
         code: 200,
         status: 'Success',
         message: 'Resource fetched successfully',
-        data: Resource,
+        data: resource,
       });
     } catch (error) {
       console.error('Error:', error);
