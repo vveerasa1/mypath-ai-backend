@@ -1,5 +1,6 @@
 const express = require("express");
-const  { createPosts,getAllPosts, likeapost,flagapost }= require("../service/posts/postService");
+const  { createPosts,getAllPosts, likeapost,flagapost}= require("../service/posts/postService");
+const {createComment,getAllComments}=require("../service/posts/comments/comments")
 const multer =require('multer');
 const { verifyToken } = require("../jwt/jwtVerification");
 const router = express.Router();
@@ -14,5 +15,7 @@ router.post("/",[file.single('file'), createPosts]);
 router.get("/",verifyToken,getAllPosts);
 router.get("/:postId/like",verifyToken,likeapost);
 router.get("/:postId/flag",verifyToken,flagapost);
+router.post("/:postId/comments",verifyToken,createComment);
+router.get("/:postId/comments",getAllComments);
 
 module.exports = router;

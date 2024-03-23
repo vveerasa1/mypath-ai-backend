@@ -25,6 +25,10 @@ const postsSchema = mongoose.Schema({
  },
  image:{
     type:String
+ },
+ audience:{
+   type:String,
+   required:true
  }
 });
 const Posts = mongoose.model("posts", postsSchema);

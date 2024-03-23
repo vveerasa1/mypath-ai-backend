@@ -39,6 +39,7 @@ const createUserPost = async (req) => {
     }
     let createdUserPost = new Posts({
       description: req.body.description,
+      audience:req.body.audience,
       createdDate: new Date(),
       userId:requestedUser._id
     });
@@ -77,6 +78,7 @@ const createCommunityPost = async (req) => {
     }
     let createdCommunityPost = new Posts({
       description: req.body.description,
+      audience:req.body.audience,
       createdDate: new Date(),
       communityId:community._id
     });
