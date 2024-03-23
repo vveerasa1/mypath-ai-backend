@@ -113,13 +113,85 @@ const getAllPosts = async (req, res) => {
     const userId=userDetails._id;
     const posts = await Posts.aggregate([
       {
-        $match: {}
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $lookup: {
+          from: "communities",
+          localField: "communityId",
+          foreignField: "_id",
+          as: "community"
+        }
+      },   
+      {
+        $addFields: {
+          follow: {
+            $cond: {
+              if: { $ne: ["$userId", null] },
+              then: {
+                $in: ["$userId", userDetails.following]
+              },
+              else: {
+                $in: ["$communityId", userDetails.communities]
+              }
+            }
+          },
+          userInfo: {
+            $cond: {
+              if: { $ne: ["$userId", null] },
+              then: {
+                $arrayElemAt: ["$user", 0]
+              },
+              else: {}
+            }
+          },
+          communityInfo: {
+            $cond: {
+              if: { $ne: ["$communityId", null] },
+              then: {
+                $arrayElemAt: ["$community", 0]
+              },
+              else: {}
+            }
+          },
+          liked: { $in: [userId, "$likes"] },
+          flagged: { $in: [userId, "$flag"] },
+          likes: { $size: "$likes" },
+          flags: { $size: "$flag" },
+        }
+      },
+      {
+        $lookup: {
+          from: "comments",
+          localField: "_id",
+          foreignField: "postId",
+          as: "comments"
+        }
       },
       {
         $addFields: {
-          liked: { $in: [userId, "$likes"] },
-          flag: { $in: [userId, "$flag"] },
-          likes: { $size: "$likes" }
+          commentCount: { $size: "$comments" } // Count the number of comments for each post
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          description: 1,
+          likes: 1,
+          flags: 1,
+          liked:1,
+          flagged:1,
+          commentCount:1,
+          createdDate: 1,
+          image: 1,
+          follow: 1,
+          userInfo: { image: 1, username: 1 },
+          communityInfo: { communityImage: 1, communityName: 1 }
         }
       }
     ]);
@@ -226,3 +298,45 @@ const flagapost=async(req,res)=>
 };
 
 module.exports = { createPosts, getAllPosts,likeapost,flagapost};
+// {
+//   $match: {}
+// },
+// {
+//   $lookup: {
+//       from: "Users",
+//       localField: "userId",
+//       foreignField: "_id",
+//       as: "user"
+//   }
+// },
+// {
+//   $addFields: {
+//       liked: { $in: [userId, "$likes"] }, // Check if current user liked the post
+//       flagged: { $in: [userId, "$flag"] }, // Check if current user flagged the post
+//       following: {
+//           $cond: {
+//               if: { $ne: [{ $type: "$userId" }, "missing"] }, // Check if userId exists
+//               then: { $in: [userId, "$user.following"] }, // Check if current user follows the user associated with the post
+//               else: { $in: [userId, "$user.communities"] } // Check if current user follows the community associated with the post
+//           }
+//       },
+//       likes: { $size: "$likes" },
+//       flag: { $size: "$flag" }
+
+//   }
+// },
+// {
+// $project: {
+//     _id: 1,
+//     description: 1,
+//     likes: 1,
+//     flag: 1,
+//     createdDate: 1,
+//     image: 1,
+//     liked: 1,
+//     flag: 1,
+//     following: 1,
+//     likes:1,
+//     flagged:1
+// }
+// }

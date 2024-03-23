@@ -15,7 +15,7 @@ router.post("/",[file.single('file'), createPosts]);
 router.get("/",verifyToken,getAllPosts);
 router.get("/:postId/like",verifyToken,likeapost);
 router.get("/:postId/flag",verifyToken,flagapost);
-router.post("/:postId/comments",verifyToken,createComment);
+router.post("/:postId/comments",createComment);
 router.get("/:postId/comments",getAllComments);
 
 module.exports = router;
