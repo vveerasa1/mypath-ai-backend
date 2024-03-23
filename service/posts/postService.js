@@ -179,6 +179,72 @@ const getAllPosts = async (req, res) => {
         }
       },
       {
+        $addFields: {
+          currentTime: { $toDate: Date.now() }, // Convert current time to Date type
+          createdDateTime: { $toDate: "$createdDate" }, // Convert createdDate to Date type
+          timeDifference: {
+            $subtract: ["$currentTime", "$createdDateTime"] // Calculate time difference in milliseconds
+          }
+        }
+      },
+      {
+        $addFields: {
+          timeDifference: {
+            $subtract: [
+              { $toDate: "$currentTime" },
+              { $toDate: "$createdDateTime" }
+            ] // Calculate time difference in milliseconds
+          }
+        }
+      },
+      {
+        $addFields: {
+          timeDifferenceInSeconds: { $divide: ["$timeDifference", 1000] } // Convert time difference to seconds
+        }
+      },
+      {
+        $addFields: {
+          timeFormatted: {
+            $cond: {
+              if: { $lt: ["$timeDifferenceInSeconds", 60] }, // Less than 1 minute
+              then: { $concat: [{ $toString: "$timeDifferenceInSeconds" }, " seconds"] },
+              else: {
+                $cond: {
+                  if: { $lt: ["$timeDifferenceInSeconds", 3600] }, // Less than 60 minutes
+                  then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 60] } } }, " minutes"] },
+                  else: {
+                    $cond: {
+                      if: { $lt: ["$timeDifferenceInSeconds", 86400] }, // Less than 24 hours
+                      then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 3600] } } }, " hours"] },
+                      else: {
+                        $cond: {
+                          if: { $lt: ["$timeDifferenceInSeconds", 2592000] }, // Less than a month (30 days)
+                          then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 86400] } } }, " days"] },
+                          else: {
+                            $cond: {
+                              if: { $lt: ["$timeDifferenceInSeconds", 31536000] }, // Less than a year (365 days)
+                              then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 2592000] } } }, " months"] },
+                              else: { // More than a year
+                                $concat: [
+                                  { $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 31536000] } } },
+                                  " years ",
+                                  { $toString: { $floor: { $divide: [{ $subtract: ["$timeDifferenceInSeconds", { $multiply: [{ $floor: { $divide: ["$timeDifferenceInSeconds", 31536000] } }, 31536000] }] }, 2592000] } } },
+                                  " months"
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
         $project: {
           _id: 1,
           description: 1,
@@ -191,7 +257,12 @@ const getAllPosts = async (req, res) => {
           image: 1,
           follow: 1,
           userInfo: { image: 1, username: 1 },
-          communityInfo: { communityImage: 1, communityName: 1 }
+          communityInfo: { communityImage: 1, communityName: 1 },
+          currentTime:1,
+          createdDateTime:1,
+          timeDifference: 1,
+          timeDifferenceInSeconds:1,
+          timeFormatted:1
         }
       }
     ]);
