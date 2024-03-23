@@ -2,6 +2,8 @@ const { Community } = require("../../models/community/community");
 const { user } = require("../../models/user");
 const { jwtDecode } = require("jwt-decode");
 const { provider } = require("../../jwt/jwtVerification");
+const { uploadFile } = require("../../service/imageUpload/imageUpload");
+
 const createUser = async (req, res) => {
   try {
     const token = req.header("x-auth-token");
@@ -46,10 +48,20 @@ const updateUser=async(req,res)=>{
   {
     throw new Error("User is Not Present");
   }
+  let uploadedImageInS3;
+  if(req.file){
+  const params = {
+    Bucket: "mypath--ai/users",
+    Key: req.file.originalname,
+    Body: req.file.buffer,
+  };
+  uploadedImageInS3= await uploadFile(params);
+};
   const data=new user({
     username:req.body.username,
     language: req.body.language,
     backgroundMode: req.body.backgroundMode,
+    image:uploadedImageInS3.Location
   });
   const { _id, ...updatedData } = data.toObject();
   if (isUserPresent) {
