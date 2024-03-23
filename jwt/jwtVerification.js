@@ -1,5 +1,7 @@
 const { CognitoJwtVerifier } =require("aws-jwt-verify");
 const config= require('../config');
+const aws = require('aws-sdk');
+
 
 // Verifier that expects valid access tokens:
 const verifier = CognitoJwtVerifier.create({
@@ -7,6 +9,13 @@ const verifier = CognitoJwtVerifier.create({
   tokenUse: "access",
   clientId: config.amplifyConfig.clientId,
 });
+
+const provider =  new aws.CognitoIdentityServiceProvider({
+  userPoolId: config.amplifyConfig.userPoolId,
+  clientId: config.amplifyConfig.clientId,
+  region:'us-east-1'
+});
+
 const verifyToken = async (req, res, next) => {
     try {
       const token = req.header('x-auth-token');
@@ -23,4 +32,4 @@ const verifyToken = async (req, res, next) => {
     }
   };
   
-module.exports={verifyToken};
+module.exports={verifyToken,provider};

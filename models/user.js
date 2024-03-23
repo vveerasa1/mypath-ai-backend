@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const userSchema = mongoose.Schema({
+  username:{
+    type:String,
+    required:true,
+  },
   cognitoUserId:{
     type:String,
     required:true,

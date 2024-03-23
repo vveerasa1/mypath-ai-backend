@@ -130,7 +130,8 @@ const addEvent = async (req, res) => {
   const getEvent = async (req, res) => {
     const eventId = req.params.eventId;
     try {
-      const event = await Event.findById(eventId);
+      let event = await Event.findById(eventId);
+
       if (!event) {
         return res.status(404).json({
           code: 404,
