@@ -263,8 +263,8 @@ const getAllPosts = async (req, res) => {
           createdDate: 1,
           image: 1,
           follow: 1,
-          userInfo: { image: 1, username: 1 },
-          communityInfo: { communityImage: 1, communityName: 1 },
+          userInfo: { image: 1, username: 1,_id:1 },
+          communityInfo: { communityImage: 1, communityName: 1,_id:1 },
           timeFormatted:1
         }
       }
