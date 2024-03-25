@@ -109,8 +109,20 @@ const createCommunityPost = async (req) => {
 const getAllPosts = async (req, res) => {
   try {
     const cognitoUserId=await getcognitoUserId(req);
-    const userDetails = await user.findOne({cognitoUserId:cognitoUserId});
-    const userId=userDetails._id;
+    if(!req.params.userId)
+    {
+      throw new Error("Please give a UserId");
+    }
+    let userId=req.params.userId;
+    const userDetails = await user.findById(userId);
+    if(!userDetails)
+    {
+      throw new Error("User is not present");
+    }
+    userId=userDetails._id;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
     const posts = await Posts.aggregate([
       {
         $lookup: {
@@ -181,10 +193,7 @@ const getAllPosts = async (req, res) => {
       {
         $addFields: {
           currentTime: { $toDate: Date.now() }, // Convert current time to Date type
-          createdDateTime: { $toDate: "$createdDate" }, // Convert createdDate to Date type
-          timeDifference: {
-            $subtract: ["$currentTime", "$createdDateTime"] // Calculate time difference in milliseconds
-          }
+          createdDateTime: { $toDate: "$createdDate" } // Convert createdDate to Date type
         }
       },
       {
@@ -207,29 +216,27 @@ const getAllPosts = async (req, res) => {
           timeFormatted: {
             $cond: {
               if: { $lt: ["$timeDifferenceInSeconds", 60] }, // Less than 1 minute
-              then: { $concat: [{ $toString: "$timeDifferenceInSeconds" }, " seconds"] },
+              then: { $concat: [{ $toString: "$timeDifferenceInSeconds" }, " seconds ago"] },
               else: {
                 $cond: {
                   if: { $lt: ["$timeDifferenceInSeconds", 3600] }, // Less than 60 minutes
-                  then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 60] } } }, " minutes"] },
+                  then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 60] } } }, " minutes ago"] },
                   else: {
                     $cond: {
                       if: { $lt: ["$timeDifferenceInSeconds", 86400] }, // Less than 24 hours
-                      then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 3600] } } }, " hours"] },
+                      then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 3600] } } }, " hours ago"] },
                       else: {
                         $cond: {
                           if: { $lt: ["$timeDifferenceInSeconds", 2592000] }, // Less than a month (30 days)
-                          then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 86400] } } }, " days"] },
+                          then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 86400] } } }, " days ago"] },
                           else: {
                             $cond: {
                               if: { $lt: ["$timeDifferenceInSeconds", 31536000] }, // Less than a year (365 days)
-                              then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 2592000] } } }, " months"] },
+                              then: { $concat: [{ $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 2592000] } } }, " months ago"] },
                               else: { // More than a year
                                 $concat: [
                                   { $toString: { $floor: { $divide: ["$timeDifferenceInSeconds", 31536000] } } },
-                                  " years ",
-                                  { $toString: { $floor: { $divide: [{ $subtract: ["$timeDifferenceInSeconds", { $multiply: [{ $floor: { $divide: ["$timeDifferenceInSeconds", 31536000] } }, 31536000] }] }, 2592000] } } },
-                                  " months"
+                                  " years ago"
                                 ]
                               }
                             }
@@ -258,19 +265,27 @@ const getAllPosts = async (req, res) => {
           follow: 1,
           userInfo: { image: 1, username: 1 },
           communityInfo: { communityImage: 1, communityName: 1 },
-          currentTime:1,
-          createdDateTime:1,
-          timeDifference: 1,
-          timeDifferenceInSeconds:1,
           timeFormatted:1
         }
       }
-    ]);
-    res.status(200).json({
+    ]).sort({ createdDate: -1 })
+    .skip(skip)
+    .limit(limit)
+    .exec();
+
+  const totalPosts = await Posts.countDocuments();
+
+  const totalPages = Math.ceil(totalPosts / limit);;
+   
+  res.status(200).json({
       code: 200,
       status: "Success",
       message: "Got the Posts Successfully",
-      data: posts,
+      data:{
+        posts,
+        totalPages,
+        currentPage: page,
+      },
     });
   } catch (error) {
     res.status(500).json({

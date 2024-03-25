@@ -12,7 +12,7 @@ const file = multer({
     },
   });
 router.post("/",[file.single('file'), createPosts]);
-router.get("/",verifyToken,getAllPosts);
+router.get("/:userId",getAllPosts);
 router.get("/:postId/like",verifyToken,likeapost);
 router.get("/:postId/flag",verifyToken,flagapost);
 router.post("/:postId/comments",createComment);
