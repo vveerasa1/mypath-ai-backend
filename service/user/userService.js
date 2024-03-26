@@ -61,7 +61,7 @@ const updateUser=async(req,res)=>{
     username:req.body.username,
     language: req.body.language,
     backgroundMode: req.body.backgroundMode,
-    image:uploadedImageInS3.Location
+    image:uploadedImageInS3?uploadedImageInS3.Location:undefined
   });
   const { _id, ...updatedData } = data.toObject();
   if (isUserPresent) {
