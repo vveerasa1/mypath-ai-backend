@@ -22,27 +22,4 @@ const uploadFile = async (parameters) => {
   });
   return data;
 };
-const getFile=async (parameters) => {
-const data = await new Promise((resolve, reject) => {
-  const parts=parameters.Key.split('/');
-  const fileName = parts[parts.length - 1];
-  parameters.Key=fileName;
-s3.getObject(parameters, (err, data) => {
-  if (err) {
-    console.error(err);
-    reject(err);
-  }
-  console.log("File downloaded successfully");
-  resolve(data.Body.toString('base64'));
-//  fs.writeFile(`${fileName}`, data.Body, (err) => {
-//     if (err) {
-// reject(err);
-//     }
-//     console.log('File downloaded successfully');
-//     resolve(data.Body);
-//   });
-});
-});
-return data;
-}
-module.exports = { uploadFile, s3 , getFile };
+module.exports = { uploadFile, s3 };

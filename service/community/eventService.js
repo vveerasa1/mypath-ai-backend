@@ -1,6 +1,6 @@
 const { Community } = require("../../models/community/community");
 const { Event } = require("../../models/community/events");
-const { uploadFile,getFile } = require("../imageUpload/imageUpload");
+const { uploadFile } = require("../imageUpload/imageUpload");
 
 
 /**
@@ -129,9 +129,9 @@ const addEvent = async (req, res) => {
    */
   const getEvent = async (req, res) => {
     const eventId = req.params.eventId;
-    const forUpdate=req.query.forUpdate||false;
     try {
       let event = await Event.findById(eventId);
+
       if (!event) {
         return res.status(404).json({
           code: 404,
@@ -139,29 +139,13 @@ const addEvent = async (req, res) => {
           message: 'Event not found',
         });
       }
-      if(forUpdate)
-    {
-    const params = {
-      Bucket: 'mypath--ai/communities/events',
-      Key:`${event.attachment}`,
-    };
-    const file=await getFile(params);
-    const updatedEvent={...event._doc,file};
-    res.status(200).json({
-      code: 200,
-      status: 'Success',
-      message: 'Event fetched successfully',
-      data:updatedEvent,
-    });
-  }
-   else{
-    res.status(200).json({
-      code: 200,
-      status: 'Success',
-      message: 'Event fetched successfully',
-      data: event,
-    });
-  }
+  
+      res.status(200).json({
+        code: 200,
+        status: 'Success',
+        message: 'Event fetched successfully',
+        data: event,
+      });
     } catch (error) {
       console.error('Error:', error);
       res.status(500).json({
