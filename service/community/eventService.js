@@ -131,14 +131,13 @@ const addEvent = async (req, res) => {
     const eventId = req.params.eventId;
     const forUpdate=req.query.forUpdate||false;
     try {
-      const community=await Community.findById(req.params.communityId);
-      if(!community)
-      {
-        throw new Error("Cannot Find Community")
-      }
       let event = await Event.findById(eventId);
       if (!event) {
-        throw new Error("Cannot Find Event")
+        return res.status(404).json({
+          code: 404,
+          status: 'Not Found',
+          message: 'Event not found',
+        });
       }
       if(forUpdate)
     {
