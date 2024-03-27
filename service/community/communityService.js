@@ -25,7 +25,8 @@ const createCommunity = async (req, res) => {
         message: "Domain not found",
       });
     }
-
+    if(!req.body.communityId)
+    {
     const isCommunityNameUnique = await Community.exists({
       communityName: req.body.communityName,
     });
@@ -37,6 +38,7 @@ const createCommunity = async (req, res) => {
         message: "Community name already exists.",
       });
     }
+  }
     const communityType = req.body.communityType;
     let createdCommunity;
 

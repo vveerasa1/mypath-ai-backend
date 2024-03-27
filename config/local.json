@@ -3,7 +3,7 @@
     "env":"local",
     "mongoDb":{
         "url":"mongodb://localhost:27017/",
-        "dbName":"mypathai-dev"
+        "dbName":"mypath-ai"
     },
     "amplifyConfig":{
         "userPoolId":"us-east-1_5RgmfErcR",
