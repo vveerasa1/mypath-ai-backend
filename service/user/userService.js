@@ -21,7 +21,7 @@ const createUser = async (req, res) => {
       throw new Error("User is Already Present");
     }
     const data = new user({
-      username:userDetails.preferred_username,
+      username:userDetails.preferred_username||req.body.username,
       cognitoUserId: userDetails.sub,
       language:"English",
       backgroundMode:"Light",
